@@ -12,6 +12,8 @@ import {
   SafeAreaView,
 } from "react-native";
 
+import FavoriteContextProvider from "./context/favorite-context";
+
 import { useFonts } from "expo-font";
 import { LinearGradient } from "expo-linear-gradient";
 import Colors from "./constants/Colors";
@@ -79,7 +81,7 @@ export default function App() {
     );
   };
   return (
-    <>
+    <FavoriteContextProvider>
       <StatusBar style="light" />{" "}
       {/* <LinearGradient
         colors={[Colors.primary500, "#ddb52f"]}
@@ -112,7 +114,7 @@ export default function App() {
         </NavigationContainer>
       </ImageBackground>
       {/* </LinearGradient> */}
-    </>
+    </FavoriteContextProvider>
   );
 }
 

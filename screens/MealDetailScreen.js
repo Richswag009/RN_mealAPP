@@ -1,37 +1,65 @@
-import React,{useLayoutEffect} from "react";
-import { View, Text, Image, StyleSheet, ScrollView, Button } from "react-native";
+import React, { useContext, useLayoutEffect } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  Button,
+} from "react-native";
 import { MEALS } from "../data/dummy-data";
 import MealDetails from "../components/MealDetails";
 import SubTitle from "../components/meal-detail/SubTitle";
 import List from "../components/meal-detail/List";
 import IconButton from "../components/IconButton";
-const MealDetailScreen = ({ route,navigation }) => {
+import { FavoritesContext } from "../context/favorite-context";
+const MealDetailScreen = ({ route, navigation }) => {
   const mealID = route.params.mealID;
 
+  const { favoriteMealIDs, addFavorites, removeFavorite } =
+    useContext(FavoritesContext);
+
   const meal = MEALS.find((meal) => meal.id === mealID);
-  //   console.log(meal);
+  
+  const mealIsFav = favoriteMealIDs.includes(mealID);
 
+  const changeFavorteStatusHandler = () => {
 
-  const headerbuttonPressHandler = ()=>{
-    console.log('pressing')
-  }
+    console.log('hey')
+    if(mealIsFav){
+      removeFavorite(mealID);
+    }else{
+      addFavorites(mealID);
+    }
+    
+   
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight : () => {
-        return <IconButton icon="star" color="white"  onPress={headerbuttonPressHandler}/>
-      }
-    })
-  },[navigation,headerbuttonPressHandler])
+      headerRight: () => {
+        return (
+          <IconButton
+            icon={mealIsFav ? "star" : "star-outline"}
+            color="white"
+            onPressHandler={changeFavorteStatusHandler}
+          />
+        );
+      },
+    });
+  }, [navigation, changeFavorteStatusHandler]);
 
-
-
-  
   return (
     <ScrollView style={styles.rootContainer}>
       <Image style={styles.image} source={{ uri: meal.imageUrl }} />
       <Text style={styles.title}>{meal.title}</Text>
 
+ 
+          <IconButton
+            icon={mealIsFav ? "star" : "star-outline"}
+            color="black"
+            onPressHandler={changeFavorteStatusHandler}
+          />
       <View>
         <MealDetails
           duration={meal.duration}
